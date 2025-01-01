@@ -361,25 +361,6 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-
-            <div className="flex items-center gap-4">
-              <button 
-                onClick={() => document.getElementById('imageInput')?.click()}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-lg shadow-lg shadow-purple-500/20 transition-all flex items-center gap-2 group"
-              >
-                <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                Upload Image
-                <input
-                  id="imageInput"
-                  type="file"
-                  className="hidden"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                />
-              </button>
-            </div>
           </nav>
         </div>
       </header>
@@ -391,23 +372,73 @@ export default function Home() {
           {/* Canvas Section */}
           <div className="bg-[#1a1a2e] rounded-xl shadow-lg border border-purple-500/10 p-4">
             <div 
-              className={`relative rounded-lg overflow-hidden transition-all aspect-video ${dragOver ? 'scale-98 border-2 border-dashed border-purple-500' : ''}`}
+              className={`relative rounded-lg overflow-hidden transition-all aspect-video ${dragOver ? 'scale-98 border-2 border-dashed border-purple-500' : 'border border-dashed border-purple-500/20'}`}
               onDragOver={(e) => {
                 e.preventDefault();
                 setDragOver(true);
               }}
               onDragLeave={() => setDragOver(false)}
               onDrop={handleDrop}
+              onClick={() => {
+                if (!selectedImage || selectedImage === DEFAULT_IMAGE) {
+                  document.getElementById('imageInput')?.click();
+                }
+              }}
               style={{ 
                 backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='grid' width='20' height='20' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 20 0 L 0 0 0 20' fill='none' stroke='%23ffffff10' stroke-width='1'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='20' height='20' fill='url(%23grid)' /%3E%3C/svg%3E")` 
               }}
             >
-              <canvas
-                ref={canvasRef}
-                onClick={getColorFromPoint}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={() => setHoverColor(null)}
-                className="w-full h-full object-contain cursor-crosshair"
+              {!selectedImage || selectedImage === DEFAULT_IMAGE ? (
+                // Upload prompt when no image is selected
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-purple-300/60">
+                  <svg className="w-12 h-12 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <p className="text-lg mb-2">Drop your image here</p>
+                  <p className="text-sm">or click to upload</p>
+                </div>
+              ) : (
+                <>
+                  {/* Canvas for selected image */}
+                  <canvas
+                    ref={canvasRef}
+                    onClick={getColorFromPoint}
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={() => setHoverColor(null)}
+                    className="w-full h-full object-contain cursor-crosshair"
+                  />
+                  {/* Delete Button */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent canvas click
+                      setSelectedImage(DEFAULT_IMAGE);
+                      setSelectedColor(null);
+                      setColorPalette([]);
+                    }}
+                    className="absolute top-4 right-4 p-2 bg-red-500/10 hover:bg-red-500/20 rounded-lg transition-colors group"
+                  >
+                    <svg 
+                      className="w-5 h-5 text-red-400 group-hover:text-red-300" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        strokeWidth={2} 
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" 
+                      />
+                    </svg>
+                  </button>
+                </>
+              )}
+              <input
+                id="imageInput"
+                type="file"
+                className="hidden"
+                accept="image/*"
+                onChange={handleImageUpload}
               />
             </div>
           </div>
@@ -423,8 +454,10 @@ export default function Home() {
                   {/* Live Color Preview */}
                   <div className="w-20">
                     <div
-                      className="h-20 rounded-lg shadow-inner transition-colors duration-200"
-                      style={{ backgroundColor: hoverColor?.hex || 'transparent' }}
+                      className={`h-20 rounded-lg shadow-inner transition-colors duration-200 ${
+                        !hoverColor?.hex ? 'bg-purple-500/5 border-2 border-dashed border-purple-500/10' : ''
+                      }`}
+                      style={{ backgroundColor: hoverColor?.hex || undefined }}
                     />
                     <div className="mt-2 text-center">
                       <p className="text-sm text-purple-300/60">Live</p>
@@ -434,8 +467,10 @@ export default function Home() {
                   {/* Selected Color Preview */}
                   <div className="flex-1">
                     <div
-                      className="h-20 rounded-lg shadow-inner"
-                      style={{ backgroundColor: selectedColor?.hex || 'transparent' }}
+                      className={`h-20 rounded-lg shadow-inner transition-colors duration-200 ${
+                        !selectedColor?.hex ? 'bg-purple-500/5 border-2 border-dashed border-purple-500/10' : ''
+                      }`}
+                      style={{ backgroundColor: selectedColor?.hex || undefined }}
                     />
                     <div className="mt-2 text-center">
                       <p className="text-sm text-purple-300/60">Selected</p>
@@ -444,7 +479,7 @@ export default function Home() {
                 </div>
 
                 {/* Selected Color Details */}
-                {selectedColor && (
+                {selectedColor ? (
                   <div className="space-y-2">
                     <button
                       onClick={() => copyToClipboard(selectedColor.hex)}
@@ -464,6 +499,11 @@ export default function Home() {
                     >
                       {selectedColor.hsl}
                     </button>
+                  </div>
+                ) : (
+                  // Placeholder when no color is selected
+                  <div className="text-center py-2 text-purple-300/40 text-sm">
+                    Click on the image to select a color
                   </div>
                 )}
               </div>

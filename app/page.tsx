@@ -334,7 +334,7 @@ export default function Home() {
                   </button>
                   <div className="absolute top-full left-0 mt-2 w-48 py-2 bg-[#1a1a2e] rounded-lg shadow-xl border border-purple-500/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
                     <Link 
-                      href="https://colorpicker.digicraft.one" 
+                      href="https://pixel.digicraft.one/" 
                       className="block px-4 py-2 text-purple-300/80 hover:text-purple-300 hover:bg-purple-500/10"
                     >
                       Color Picker
@@ -611,7 +611,7 @@ export default function Home() {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                    DigiCraft
+                    Pixel
                   </h3>
                   <p className="text-xs text-purple-300/60">Color Picker</p>
                 </div>

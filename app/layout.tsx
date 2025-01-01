@@ -7,18 +7,18 @@ import Link from "next/link";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://colorpicker.digicraft.one'),
+  metadataBase: new URL('https://pixel.digicraft.one'),
   title: "Color Picker - DigiCraft Tools",
   description: "Free online tool to extract colors from images. Get HEX, RGB, and HSL color codes with our easy-to-use color picker. Create and save color palettes instantly.",
   keywords: "color picker, image color extractor, color palette generator, hex color picker, rgb color picker, web design tools, digicraft tools",
   openGraph: {
     title: "Color Picker - DigiCraft Tools",
     description: "Extract colors from images and create beautiful color palettes with our free online tool.",
-    url: 'https://colorpicker.digicraft.one',
+    url: 'https://pixel.digicraft.one',
     siteName: "DigiCraft Tools",
     images: [
       {
-        url: 'https://colorpicker.digicraft.one/logo.png',
+        url: 'https://pixel.digicraft.one/logo.png',
         width: 192,
         height: 192,
         alt: "DigiCraft Color Picker Logo",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     title: "Color Picker - DigiCraft Tools",
     description: "Extract colors from images and create beautiful color palettes with our free online tool.",
     creator: "@digicraft",
-    images: ['https://colorpicker.digicraft.one/logo.png'],
+    images: ['https://pixel.digicraft.one/logo.png'],
   },
   icons: {
     icon: [
@@ -88,7 +88,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <link rel="canonical" href="https://colorpicker.digicraft.one" />
+        <link rel="canonical" href="https://pixel.digicraft.one" />
         <meta name="theme-color" content="#0a0a15" />
         <link rel="icon" type="image/png" href="/logo.png" />
         <link rel="apple-touch-icon" href="/logo.png" />
